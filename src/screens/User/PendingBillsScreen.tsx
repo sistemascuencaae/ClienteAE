@@ -1,10 +1,8 @@
 import React from 'react'
 import { View } from 'react-native'
 
-export default function RegistroScreen() {
+export const PendingBillsScreen = () => {
   return (
-    <View>
-        
-    </View>
+    <View></View>
   )
 }

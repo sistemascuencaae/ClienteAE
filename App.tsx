@@ -1,19 +1,13 @@
-// App.tsx
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { Provider, useSelector } from "react-redux";
-import store, { RootState } from "./src/store";
-import { LogBox } from 'react-native';
-import { MainNavigator } from "./src/navigation/MainNavigator";
+import React from 'react';
+import { AuthProvider } from './src/context/AuthContext';
+import AppNavigator from './src/navigation/AppNavigation';
 
-
-
-export default function App() {
+const App = () => {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <MainNavigator />
-      </NavigationContainer>
-    </Provider>
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
   );
-}
+};
+
+export default App;

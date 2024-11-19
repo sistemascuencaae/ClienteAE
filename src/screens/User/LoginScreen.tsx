@@ -1,29 +1,21 @@
-// screens/LoginScreen.tsx
-import React from "react";
-import { View, Button, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../store";
-import { login } from "../../store/slice/userSlice";
+import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 
-export const LoginScreen = () => {
-  const dispatch = useDispatch<AppDispatch>();
+const LoginScreen = () => {
+    const { login } = useAuth();
 
-  const handleLogin = () => {
-    const fakeToken = "abc123"; // Simula un token generado
-    dispatch(login({ token: fakeToken }));
-  };
-
-  return (
-    <View style={styles.container}>
-      <Button title="Login" onPress={handleLogin} />
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Login</Text>
+            <Button title="Log In" onPress={login} />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    title: { fontSize: 24, marginBottom: 20 },
 });
+
+export default LoginScreen;
