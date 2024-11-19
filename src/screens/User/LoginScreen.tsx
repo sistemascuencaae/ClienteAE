@@ -1,28 +1,29 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react'
-import { View, TouchableOpacity } from 'react-native';
-import { Button, Text } from 'react-native-paper'
-
-type RootStackParamList = {
-  Register: undefined; 
-};
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+// screens/LoginScreen.tsx
+import React from "react";
+import { View, Button, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
+import { login } from "../../store/userSlice";
 
 export const LoginScreen = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  function navegar(ruta: keyof RootStackParamList) {
-    navigation.navigate(ruta);
-  }
-
+  const handleLogin = () => {
+    const fakeToken = "abc123"; // Simula un token generado
+    dispatch(login({ token: fakeToken }));
+  };
 
   return (
-    <View>
-      <TouchableOpacity onPress={() => navegar('Register')}>
-        <Text>Registrarse</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Button title="Login" onPress={handleLogin} />
     </View>
-  )
-}
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
