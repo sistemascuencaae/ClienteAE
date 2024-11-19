@@ -3,7 +3,7 @@ import React from "react";
 import { View, Button, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store";
-import { login } from "../../store/userSlice";
+import { login } from "../../store/slice/userSlice";
 
 export const LoginScreen = () => {
   const dispatch = useDispatch<AppDispatch>();

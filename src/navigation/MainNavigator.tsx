@@ -12,7 +12,7 @@ export const MainNavigator = () => {
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        <Stack.Screen name="AppNavigator" component={AppNavigator} />
+        <Stack.Screen name="AppNavigator" component={AppNavigator} options={{headerShown: false}}/>
       ) : (
         <Stack.Screen name="UserNavigator" component={UserNavigation} />
       )}
