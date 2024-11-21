@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Animated, {
@@ -45,7 +46,6 @@ export default function App({ width }: AppProps) {
     setCargaInit(false); //
   }, 6000);
 
-console.log('variables');
 
   // prettier-ignore
   const show = () => {

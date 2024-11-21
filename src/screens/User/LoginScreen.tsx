@@ -1,11 +1,61 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Button, StyleSheet, ToastAndroid } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { TextInput } from 'react-native-paper';
-
+import * as LocalAuthentication from 'expo-local-authentication';
 const LoginScreen = () => {
     const { login } = useAuth();
     const [text, setText] = React.useState("");
+
+    useEffect(() => {
+        handleBiometricAuth();
+    }, []);
+
+    const handleBiometricAuth = async () => {
+        const compatible = await LocalAuthentication.hasHardwareAsync();
+        if (!compatible) {
+            ToastAndroid.showWithGravity(
+                "Tu dispositivo no soporta autenticación biométrica.",
+                ToastAndroid.LONG,
+                ToastAndroid.CENTER
+            );
+
+            return;
+        }
+        const enrolled = await LocalAuthentication.isEnrolledAsync();
+        if (!enrolled) {
+            ToastAndroid.showWithGravity(
+                "No hay huellas digitales registradas en este dispositivo.",
+                ToastAndroid.LONG,
+                ToastAndroid.CENTER
+            );
+
+            return;
+        }
+        const result = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Confirma tu identidad',
+            fallbackLabel: 'Usar contraseña',
+        });
+
+        if (result.success) {
+            ToastAndroid.showWithGravity(
+                "Autenticación exitosa', '¡Bienvenido!",
+                ToastAndroid.LONG,
+                ToastAndroid.CENTER,
+
+            );
+
+        } else {
+            ToastAndroid.showWithGravity(
+                "La autenticación falló o fue cancelada.",
+                ToastAndroid.LONG,
+                ToastAndroid.CENTER,
+            );
+        }
+    };
+
+
+
 
     return (
         <View style={styles.container}>
