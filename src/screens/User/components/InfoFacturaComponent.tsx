@@ -1,94 +1,110 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
-import Animated, { useAnimatedRef } from 'react-native-reanimated';
-
-const ITEM_COUNT = 9; // Número total de items
+import { Dimensions, StatusBar } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+type ItemProps = { title: string };
+const widthWindow = Dimensions.get('window').width;
 
 export default function InfoFacturaComponent() {
-    const animatedRef = useAnimatedRef<Animated.ScrollView>();
-    const items = Array.from(Array(ITEM_COUNT).keys());
-    const [cuotas, setCuotas] = useState<number[]>([1,2,3,4]);
+    const DATA = [
+        {
+            id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+            title: 'First Item',
+        },
+        {
+            id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+            title: 'Second Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d72',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d73',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d74',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d75',
+            title: 'Third Item',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d76',
+            title: 'Third Item'
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d77',
+            title: 'Third 7',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d78',
+            title: 'Third 8',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d79',
+            title: 'Third 8',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d710',
+            title: 'Third 8',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d7111',
+            title: 'Third 8',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d7112',
+            title: 'Third 12',
+        },
+        {
+            id: '58694a0f-3da1-471f-bd96-145571e29d7113',
+            title: 'Third 13',
+        },
+    ];
     return (
         <View style={styles.container}>
-            <View style={styles.row}>
-                <Text style={{ fontWeight: 'bold', width: '50%'}}>Factura número: <Text>FAE-1-501-5368</Text></Text>
-                <Text style={{ fontWeight: 'bold', width: '50%' }}>Fecha emisión: <Text>Factura</Text></Text>
+                <Text style={{ paddingRight: 15 }}>Factura número: <Text style={{ fontWeight: 'bold',}}>FAE-1-501-5368</Text></Text>
+                <Text>Fecha emisión: <Text style={{ fontWeight: 'bold' }}>Factura</Text></Text>
+        
+                <Text style={{ paddingRight: 15 }}>Cliente: <Text style={{ fontWeight: 'bold' }}>Tomas Felipe quichimbo Peralta</Text></Text>
+                <Text >Identificación: <Text style={{ fontWeight: 'bold' }}>0107199556</Text></Text>
+        
+            <View style={styles.horizontalDivider} />
+            <Text>Resumen</Text>
+            <View style={styles.containerFlat}>
+                <FlatList
+                    data={DATA}
+                    renderItem={({ item }) => <Text>Test{item.title}</Text>}
+                    keyExtractor={item => item.id}
+                />
             </View>
-            <View style={styles.boxPagos}>
-                <View style={styles.boxWrapper}>
-                    <Animated.ScrollView ref={animatedRef} style={{ backgroundColor: 'green', height: 50, width: 100 }}>
-                        {cuotas.map((_, i) => (
-                            <View key={i} style={{ width: '100%', height: 500, backgroundColor: '#ffffff' }}>
-<Text>aaaaaaaaaaa</Text>
-                            </View>
-                        ))}
-                    </Animated.ScrollView>
-                </View>
-            </View>
-            
         </View>
-    );
+    )
+
+
 }
+
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: 'red'
+        width: '95%', height: '98%', 
+    },
+    containerFlat: {
+        backgroundColor: 'white',
+        minHeight: '50%',
+        maxHeight: '50%',
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 5,
+        maxWidth: widthWindow-150,
     },
-    box: {
-        backgroundColor: '#696969',
-        flex: 1,
-        margin: 5,
-        height: 100,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    boxPagos: {
-        backgroundColor: '#ffffff',
-        width: '100%',
-        height: '70%',
-    },
-    boxWrapper: {
-        backgroundColor: 'white',
-        height: 150,
-        minWidth: '100%',
-
+    horizontalDivider: {
+        width: '98%',
+        height: 1,
+        backgroundColor: '#704747',
+        marginVertical: 10,
     },
 });
 
 
-
-
-
-
-
-
-// <View style={styles.row}>
-//     {items.slice(0, 3).map((item) => (
-//         <Text >{item}</Text>
-//     ))}
-// </View>
-
-
-// <View style={styles.row}>
-//     {items.slice(3, 5).map((item) => (
-//         <Text >{item}</Text>
-
-//     ))}
-// </View>
-
-
-// <View style={styles.row}>
-//     {items.slice(5, 9).map((item) => (
-//         <Text >{item}</Text>
-
-//     ))}
-// </View>

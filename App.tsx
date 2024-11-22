@@ -158,9 +158,12 @@
 import React from 'react';
 import { AuthProvider } from './src/context/AuthContext';
 import AppNavigator from './src/navigation/AppNavigation';
+import InfoFacturaComponent from './src/screens/user/components/InfoFacturaComponent';
+import PendingBillsScreen from './src/screens/user/PendingBillsScreen';
 
 const App = () => {
   return (
+    // <PendingBillsScreen />
     <AuthProvider>
       <AppNavigator />
     </AuthProvider>

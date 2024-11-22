@@ -1,88 +1,83 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View, Button } from 'react-native';
-import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { View, Text, StyleSheet, TextInput, Button, Dimensions } from 'react-native';
+import Animated, {
+  useAnimatedProps,
+  useAnimatedRef,
+  useDerivedValue,
+  useScrollViewOffset,
+} from 'react-native-reanimated';
+import type { DerivedValue } from 'react-native-reanimated';
 import InfoFacturaComponent from './components/InfoFacturaComponent';
 
-// Configura el logger para desactivar el modo estricto
-configureReanimatedLogger({
-  level: ReanimatedLogLevel.warn,
-  strict: false,
-});
-
-const data = [...new Array(6).keys()];
-const width = Dimensions.get("window").width;
-
-const PendingBillsScreen: React.FC = () => {
-  const ref = React.useRef<ICarouselInstance>(null);
-
-  // Funciones para cambiar de ítem
-  const goToNext = () => {
-    if (ref.current) {
-      ref.current.next();
-    }
-  };
-
-  const goToPrevious = () => {
-    if (ref.current) {
-      ref.current.prev();
-    }
-  };
+const widthWindow = Dimensions.get('window').width;
+export default function PendingBillsScreen() {
+  const animatedRef = useAnimatedRef<Animated.ScrollView>();
+  // highlight-start
+  const offset = useScrollViewOffset(animatedRef);
+  const text = useDerivedValue(
+    () => `Scroll offset: ${offset.value.toFixed(1)}`
+  );
+  // highlight-end
 
   return (
     <View style={styles.container}>
-      <Carousel
-        ref={ref}
-        width={width}
-        height={100}
-        data={data}
-        autoPlay={false}
-        enabled={false}
-        style={styles.carousel}
-        renderItem={({ index }) => (
-          <View key={index} style={styles.card}>
-            <InfoFacturaComponent />
+      <Animated.ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        ref={animatedRef}
+        horizontal={true}>
+        {Array.from({ length: 10 }).map((_, i) => (
+          <View key={i} style={styles.box}>
+           <InfoFacturaComponent/>
           </View>
-        )}
-      />
-
-      <View style={styles.buttonsContainer}>
-        <Button title="Anterior" onPress={goToPrevious} />
-        <Button title="Siguiente" onPress={goToNext} />
-      </View>
+        ))}
+      </Animated.ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    margin: 5,
+    minHeight: '88%',
+    
   },
-  carousel: {
-    height: '100%',
+  scroll: {
+    height: 250,
+    marginTop:5,
+    marginBottom: 5,
   },
-  card: {
-    justifyContent: 'center',
+  scrollContent: {
     alignItems: 'center',
-    borderRadius: 10,
-    marginHorizontal: 5,
-    backgroundColor: '#bebebe',
+  },
+  box: {
+    minWidth: widthWindow-12,
     minHeight: '100%',
+    margin: 5,
+    borderRadius: 15,
+    backgroundColor: '#bebebe',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    width: '60%',
-  },
-  text: {
-    fontSize: 24,
-    color: '#fff',
-    fontWeight: 'bold',
+  center: {
+    textAlign: 'center',
   },
 });
 
-export default PendingBillsScreen;
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+Animated.addWhitelistedNativeProps({ text: true });
+
+function AnimatedText({ text, ...props }: { text: DerivedValue<string> }) {
+  const animatedProps = useAnimatedProps(() => ({
+    text: text.value,
+    defaultValue: text.value,
+  }));
+  return (
+    <AnimatedTextInput
+      editable={false}
+      {...props}
+      value={text.value}
+      animatedProps={animatedProps}
+    />
+  );
+}
