@@ -17,10 +17,10 @@ export default function InfoFacturaComponent() {
             </View>
             <View style={styles.boxPagos}>
                 <View style={styles.boxWrapper}>
-                    <Animated.ScrollView ref={animatedRef}>
+                    <Animated.ScrollView ref={animatedRef} style={{ backgroundColor: 'green', height: 50, width: 100 }}>
                         {cuotas.map((_, i) => (
-                            <View key={i} style={{width: '100%', height: 50, backgroundColor: 'red'}}>
-                                
+                            <View key={i} style={{ width: '100%', height: 500, backgroundColor: '#ffffff' }}>
+<Text>aaaaaaaaaaa</Text>
                             </View>
                         ))}
                     </Animated.ScrollView>
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
+        backgroundColor: 'red'
     },
     row: {
         flexDirection: 'row',
@@ -51,12 +52,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     boxPagos: {
-        backgroundColor: 'white',
+        backgroundColor: '#ffffff',
         width: '100%',
         height: '70%',
     },
     boxWrapper: {
-
+        backgroundColor: 'white',
+        height: 150,
+        minWidth: '100%',
 
     },
 });
