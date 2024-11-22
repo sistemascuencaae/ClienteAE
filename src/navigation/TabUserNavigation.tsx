@@ -1,7 +1,8 @@
-import { PendingBillsScreen } from '../screens/user/PendingBillsScreen';
+
 import ProfileUserScreen from '../screens/user/ProfileUserScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import PendingBillsScreen from '../screens/user/PendingBillsScreen';
 
 const Tab = createBottomTabNavigator();
 const TabUserNavigation = () => (

@@ -5,11 +5,18 @@ import { TextInput } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 const LoginScreen = () => {
     const { login } = useAuth();
-    const [text, setText] = React.useState("");
+    const [txtUsuario, setTxtUsuario] = React.useState("");
+    const [txtPassword, setTxtPassword] = React.useState("");
 
     useEffect(() => {
         handleBiometricAuth();
     }, []);
+
+
+    async function cargaInicial(){
+        const res1 = await handleBiometricAuth();
+
+    }
 
     const handleBiometricAuth = async () => {
         const compatible = await LocalAuthentication.hasHardwareAsync();
@@ -44,14 +51,16 @@ const LoginScreen = () => {
                 ToastAndroid.CENTER,
 
             );
-
+            return true;
         } else {
             ToastAndroid.showWithGravity(
                 "La autenticación falló o fue cancelada.",
                 ToastAndroid.LONG,
                 ToastAndroid.CENTER,
             );
+            return false;
         }
+        
     };
 
 
@@ -63,14 +72,16 @@ const LoginScreen = () => {
             <TextInput
                 style={styles.input}
                 label="Usuario"
-                value={text}
-                onChangeText={text => setText(text)}
+                value={txtUsuario}
+                onChangeText={text => setTxtUsuario(text)}
                 right={<TextInput.Icon icon="account" />}
             />
             <TextInput
                 style={styles.input}
                 label="Conotraseña"
                 secureTextEntry
+                value={txtPassword}
+                onChangeText={text => setTxtPassword(text)}
                 right={<TextInput.Icon icon="eye" />}
             />
             <View style={styles.buttonContainer}>
