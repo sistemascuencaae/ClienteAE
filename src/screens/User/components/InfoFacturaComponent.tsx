@@ -1,5 +1,6 @@
 import { Dimensions, StatusBar } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import ModalPuntosPago from "./ModalPuntosPago";
 type ItemProps = { title: string };
 const widthWindow = Dimensions.get('window').width;
 
@@ -78,6 +79,12 @@ export default function InfoFacturaComponent() {
                     renderItem={({ item }) => <Text>Test{item.title}</Text>}
                     keyExtractor={item => item.id}
                 />
+            </View>
+            <View style={styles.horizontalDivider} />
+            <View style={styles.row}>
+                <Text>HOla</Text>
+                <Text>HOla</Text>
+                
             </View>
         </View>
     )
