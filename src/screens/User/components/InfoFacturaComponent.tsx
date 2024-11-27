@@ -1,6 +1,7 @@
 import { Dimensions, StatusBar } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import ModalPuntosPago from "./ModalPuntosPago";
+import { MD3Colors, ProgressBar } from "react-native-paper";
 type ItemProps = { title: string };
 const widthWindow = Dimensions.get('window').width;
 
@@ -63,13 +64,17 @@ export default function InfoFacturaComponent() {
             title: 'Third 13',
         },
     ];
+    
+
+   
+
     return (
         <View style={styles.container}>
-                <Text style={{ paddingRight: 15 }}>Factura número: <Text style={{ fontWeight: 'bold',}}>FAE-1-501-5368</Text></Text>
-                <Text>Fecha emisión: <Text style={{ fontWeight: 'bold' }}>Factura</Text></Text>
-        
-                <Text style={{ paddingRight: 15 }}>Cliente: <Text style={{ fontWeight: 'bold' }}>Tomas Felipe quichimbo Peralta</Text></Text>
-                <Text >Identificación: <Text style={{ fontWeight: 'bold' }}>0107199556</Text></Text>
+                    <Text style={{ paddingRight: 15 }}>Factura número: <Text style={{ fontWeight: 'bold',}}>FAE-1-501-5368</Text></Text>
+                    <Text>Fecha emisión: <Text style={{ fontWeight: 'bold' }}>Factura</Text></Text>
+            
+                    <Text style={{ paddingRight: 15 }}>Cliente: <Text style={{ fontWeight: 'bold' }}>Tomas Felipe quichimbo Peralta</Text></Text>
+                    <Text >Identificación: <Text style={{ fontWeight: 'bold' }}>0107199556</Text></Text>
         
             <View style={styles.horizontalDivider} />
             <Text>Resumen</Text>
@@ -81,9 +86,9 @@ export default function InfoFacturaComponent() {
                 />
             </View>
             <View style={styles.horizontalDivider} />
+                <ProgressBar progress={1} color={'red'} />
             <View style={styles.row}>
-                <Text>HOla</Text>
-                <Text>HOla</Text>
+                <Text>HOla2</Text>
                 
             </View>
         </View>
