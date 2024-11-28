@@ -2,6 +2,7 @@ import React from "react";
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import { DetallePagosFaeModel } from "../../../models/DetallePagoModel";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const widthWindow = Dimensions.get("window").width;
 
@@ -45,7 +46,7 @@ const InfoFacturaComponent: React.FC<DataProps> = ({ factura }) => {
                 renderItem={({ item }) => (
                     <View style={styles.row}>
                         <Text style={styles.cell}>{item.ddo_num_pago}</Text>
-                        <Text style={styles.cellTipoVen}>{item.tipo_vencido}</Text>
+                        <TipoVencido tipoVencido={item.tipo_vencido} fechaVen={item.ddo_fechaven}/>
                         <Text style={styles.cell}>${item.monto_cancelado ? item.monto_cancelado : 0}</Text>
                         <Text style={styles.cell}>{item.ddo_monto}</Text>
                         <Text style={styles.cell}>{item.saldo}</Text>
@@ -65,6 +66,60 @@ const InfoFacturaComponent: React.FC<DataProps> = ({ factura }) => {
         </View>
     );
 };
+
+interface DataPropsTV {
+    tipoVencido: string; // Propiedad que recibirá el hijo
+    fechaVen: string; //
+}
+//: React.FC<DataProps> = ({ factura }) =>
+const TipoVencido: React.FC<DataPropsTV> = ({ tipoVencido, fechaVen }) => {
+
+
+    function calcularDiferenciaDias(fecha1: Date): number {
+        const fecha2 = new Date(); // Fecha actual
+
+        // Convertir ambas fechas a milisegundos
+        const tiempo1 = fecha1.getTime();
+        const tiempo2 = fecha2.getTime();
+
+        // Calcular la diferencia en milisegundos
+        const diferenciaMilisegundos = tiempo2 - tiempo1;
+
+        // Convertir de milisegundos a días (1 día = 86400000 ms)
+        const diferenciaDias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+
+        return diferenciaDias;
+    }
+
+    const diasDiferencia = calcularDiferenciaDias(new Date(fechaVen));
+
+
+    if(tipoVencido === "VENCIDO"){
+        return(<Text style={styles.cellTipoVen}>
+            <MaterialCommunityIcons name="alert-circle-outline" size={12} color="red" />
+            {tipoVencido}
+        </Text>);
+    }
+
+    if (tipoVencido === "POR VENCER" && diasDiferencia >= -5) {
+        return (<Text style={styles.cellTipoPorV}>
+            <MaterialCommunityIcons name="bell-ring-outline" size={12} color="yellow" />
+             {tipoVencido}
+        </Text>);
+    }
+    //check-circle-outline
+
+    if (tipoVencido === "CANCELADO") {
+        return (<Text style={styles.cellTipoCan}>
+            <MaterialCommunityIcons name="check-circle-outline" size={12} color="green" />
+            {tipoVencido}
+        </Text>);
+    }
+
+    return(
+        <Text style={styles.cell}>{tipoVencido}</Text>
+    );
+}
 
 export default InfoFacturaComponent;
 
@@ -108,7 +163,22 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: "center",
         maxWidth: 60,
-        fontSize: 9
+        fontSize: 9,
+        color: 'red'
+    },
+    cellTipoPorV:{
+        flex: 1,
+        textAlign: "center",
+        maxWidth: 60,
+        fontSize: 8,
+        color: '#ffff00'
+    },
+    cellTipoCan: {
+        //flex: 1,
+        textAlign: "left",
+        maxWidth: 60,
+        fontSize: 8,
+        color: 'green'
     },
     headerText: {
         fontWeight: "bold",
