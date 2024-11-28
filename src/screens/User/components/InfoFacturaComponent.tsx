@@ -3,6 +3,7 @@ import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { ProgressBar } from "react-native-paper";
 import { DetallePagosFaeModel } from "../../../models/DetallePagoModel";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { fun_validarDecimales } from "../../../service/Validaciones";
 
 const widthWindow = Dimensions.get("window").width;
 
@@ -14,18 +15,27 @@ const InfoFacturaComponent: React.FC<DataProps> = ({ factura }) => {
     return (
         <View style={styles.container}>
             {/* Información de la factura */}
-            <Text style={{ paddingRight: 15 }}>
+            <Text style={styles.textCabe}>
                 Factura número: <Text style={styles.bold}>{factura.ddo_doctran}</Text>
             </Text>
-            <Text>
+            <Text style={styles.textCabe}>
                 Fecha emisión: <Text style={styles.bold}>{factura.ddo_fecha_emision}</Text>
             </Text>
-            <Text>
-                Total a pagar: <Text style={styles.bold}>${factura.totalApagar}</Text>
-            </Text>
-            <Text>
-                Total pagado: <Text style={styles.bold}>${factura.totalPagado}</Text>
-            </Text>
+            <View style={styles.row}>
+                <Text style={styles.textCabe}>
+                    Total a pagar: <Text style={styles.bold}>${factura.totalApagar}</Text>
+                </Text>
+                <Text style={styles.textCabe}>
+                    Total pagado: <Text style={styles.bold}>${factura.totalPagado}</Text>
+                </Text>
+                <Text style={styles.textCabe}>
+                    % <Text style={styles.bold}>{factura.porcenPago}</Text>
+                </Text>
+            </View>
+            
+            {/* Barra de progreso */}
+            <ProgressBar progress={fun_validarDecimales((factura.porcenPago / 100), "B")} color={"#2cda09"} />
+
 
             <View style={styles.horizontalDivider} />
             <Text style={styles.sectionTitle}>Resumen</Text>
@@ -57,9 +67,6 @@ const InfoFacturaComponent: React.FC<DataProps> = ({ factura }) => {
             />
 
             <View style={styles.horizontalDivider} />
-            {/* Barra de progreso */}
-            <ProgressBar progress={1} color={"red"} />
-
             <View style={styles.row}>
                 <Text>Otro contenido...</Text>
             </View>
@@ -117,7 +124,7 @@ const TipoVencido: React.FC<DataPropsTV> = ({ tipoVencido, fechaVen }) => {
     }
 
     return(
-        <Text style={styles.cell}>{tipoVencido}</Text>
+        <Text style={styles.cellTipoVencimiento}>{tipoVencido}</Text>
     );
 }
 
@@ -127,6 +134,9 @@ const styles = StyleSheet.create({
     container: {
         width: "95%",
         height: "98%",
+    },
+    textCabe: {
+        fontSize: 12,
     },
     sectionTitle: {
         fontSize: 16,
@@ -145,7 +155,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         borderBottomWidth: 1,
         borderBottomColor: "#ddd",
-        paddingVertical: 8,
+        justifyContent: 'space-between'
+        //paddingVertical: 4,
     },
     header: {
         backgroundColor: "#e0e0e0",
@@ -155,9 +166,16 @@ const styles = StyleSheet.create({
     cell: {
         flex: 1,
         textAlign: "center",
-        maxWidth: 60,
+        maxWidth: 50,
         fontSize: 9,
         
+    },
+    cellTipoVencimiento: {
+        flex: 1,
+        textAlign: "center",
+        maxWidth: 60,
+        fontSize: 9,
+
     },
     cellTipoVen:{
         flex: 1,
@@ -187,7 +205,7 @@ const styles = StyleSheet.create({
         width: "98%",
         height: 1,
         backgroundColor: "#704747",
-        marginVertical: 10,
+        marginVertical: 2,
     },
 });
 

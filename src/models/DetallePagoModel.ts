@@ -27,6 +27,7 @@ export interface PagoModel {
     saldo: number;
     //interes: number;
     
+    
 }
 
 export interface DetallePagosFaeModel {
@@ -36,5 +37,6 @@ export interface DetallePagosFaeModel {
   totalApagar: number;
   totalPagado: number;
   ddo_fecha_emision: string;
+  porcenPago: number; //
   pagos: PagoModel[];
 }

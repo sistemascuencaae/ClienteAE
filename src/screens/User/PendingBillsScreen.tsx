@@ -10,6 +10,7 @@ import type { DerivedValue } from 'react-native-reanimated';
 import InfoFacturaComponent from './components/InfoFacturaComponent';
 import { DetallePagosFaeModel, PagoModel, PagosCliModel } from '../../models/DetallePagoModel';
 import { dataFacturas } from './components/temp';
+import { fun_validarDecimales } from '../../service/Validaciones';
 
 const widthWindow = Dimensions.get('window').width;
 export default function PendingBillsScreen() {
@@ -57,7 +58,9 @@ export default function PendingBillsScreen() {
       );
 
       // Calcular la diferencia
-      const saldo = Math.max(0, pago.valor - sumaPagosPrevios);
+      const res = Math.max(0, pago.valor - sumaPagosPrevios);
+
+      const saldo = fun_validarDecimales(res,"");
 
       // Retornar el pago original con la saldo calculada
       return {
@@ -93,6 +96,7 @@ export default function PendingBillsScreen() {
           ddo_fecha_emision: pago.ddo_fecha_emision,
           totalApagar: 0,
           totalPagado: 0,
+          porcenPago: 0,
           pagos: [],
         };
         numPagoSaldo= 1;
@@ -110,7 +114,7 @@ export default function PendingBillsScreen() {
         tipo_vencido: pago.tipo_vencido,
         dias_atraso: pago.dias_atraso,
         fecha_vencimiento: pago.ddo_fechaven,
-        saldo: 0
+        saldo: 0,
       });
       //saldo
       
@@ -120,7 +124,10 @@ export default function PendingBillsScreen() {
       if (numPago != pago.ddo_num_pago) {
         numPago = pago.ddo_num_pago;
         acc[ddo_doctran].totalApagar += pago.valor;
+        acc[ddo_doctran].porcenPago = fun_validarDecimales((acc[ddo_doctran].totalPagado / acc[ddo_doctran].totalApagar)*100,"P");
       }
+
+
     
       return acc;
     }, {} as Record<string, DetallePagosFaeModel>);
