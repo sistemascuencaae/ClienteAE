@@ -11,6 +11,7 @@ import InfoFacturaComponent from './components/InfoFacturaComponent';
 import { DetallePagosFaeModel, PagoModel, PagosCliModel } from '../../models/DetallePagoModel';
 import { dataFacturas } from './components/temp';
 import { fun_validarDecimales } from '../../service/Validaciones';
+import { LoadingComponent } from '../../components/Loading';
 
 const widthWindow = Dimensions.get('window').width;
 export default function PendingBillsScreen() {
@@ -36,14 +37,14 @@ export default function PendingBillsScreen() {
 
     for (let index = 0; index < pagos.length; index++) {
       pagos[index].pagos = calcularDiferencia(pagos[index]);
-      
+
     }
     setDetallePagos(pagos);
 
   }
 
   // Calcular la diferencia
- // const calcularDiferencia = (pagos: PagoModel[]) => {
+  // const calcularDiferencia = (pagos: PagoModel[]) => {
   function calcularDiferencia(data: DetallePagosFaeModel): (PagoModel & { saldo: number })[] {
     const pagosConDiferencia = data.pagos.map((pago, index, array) => {
       // Filtrar los pagos dentro del mismo `ddo_num_pago` antes de la posición actual
@@ -60,7 +61,7 @@ export default function PendingBillsScreen() {
       // Calcular la diferencia
       const res = Math.max(0, pago.valor - sumaPagosPrevios);
 
-      const saldo = fun_validarDecimales(res,"");
+      const saldo = fun_validarDecimales(res, "");
 
       // Retornar el pago original con la saldo calculada
       return {
@@ -72,14 +73,14 @@ export default function PendingBillsScreen() {
     return pagosConDiferencia;
   }
 
- 
+
 
 
   function groupByFactura(data: PagosCliModel[]): DetallePagosFaeModel[] {
     let count = 1;
     let numPago = 0;
     let numPagoSaldo = 1;
- 
+
     const grouped = data.reduce((acc, pago) => {
       const { ddo_doctran } = pago;
       //numPago = pago.ddo_num_pago;
@@ -99,7 +100,7 @@ export default function PendingBillsScreen() {
           porcenPago: 0,
           pagos: [],
         };
-        numPagoSaldo= 1;
+        numPagoSaldo = 1;
       }
 
       // Agregamos el pago actual a la lista de pagos
@@ -117,24 +118,39 @@ export default function PendingBillsScreen() {
         saldo: 0,
       });
       //saldo
-      
+
       // Actualizamos los totales
       const valorCancelado = pago.valor_cobro ? pago.valor_cobro : 0
       acc[ddo_doctran].totalPagado += valorCancelado;
       if (numPago != pago.ddo_num_pago) {
         numPago = pago.ddo_num_pago;
         acc[ddo_doctran].totalApagar += pago.valor;
-        acc[ddo_doctran].porcenPago = fun_validarDecimales((acc[ddo_doctran].totalPagado / acc[ddo_doctran].totalApagar)*100,"P");
+        acc[ddo_doctran].porcenPago = fun_validarDecimales((acc[ddo_doctran].totalPagado / acc[ddo_doctran].totalApagar) * 100, "P");
       }
 
 
-    
+
       return acc;
     }, {} as Record<string, DetallePagosFaeModel>);
 
     // Convertimos el objeto agrupado en un array
     return Object.values(grouped);
   }
+
+
+  if (!detallePagos) {
+    return (<LoadingComponent />);
+  }
+
+  if (detallePagos.length === 0) {
+    return (<Text>Sin facturas</Text>);
+  }
+
+
+
+
+
+
 
 
   return (
@@ -144,14 +160,11 @@ export default function PendingBillsScreen() {
         contentContainerStyle={styles.scrollContent}
         ref={animatedRef}
         horizontal={true}>
-        {!detallePagos ?
-          <Text>Cargando...</Text>
-          :
-          detallePagos.map((item, i) => (
-            <View key={i} style={styles.box}>
-              <InfoFacturaComponent factura={item} />
-            </View>
-          ))
+        {detallePagos.map((item, i) => (
+          <View key={i} style={styles.box}>
+            <InfoFacturaComponent factura={item} />
+          </View>
+        ))
         }
       </Animated.ScrollView>
     </View>
